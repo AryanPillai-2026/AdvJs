@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        fieldset { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            padding: 20px;
+            background: #fff;
+            border: 2px solid #333;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 9999;
+            text-align: center;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+        canvas { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <canvas id="companyLogo" width="200" height="50"></canvas>
+
+    <form id="jobForm">
+        <fieldset>
+            <legend>Personal Details</legend>
+            Name: <input type="text" id="name"><br>
+            Email: <input type="text" id="email"><br>
+            Phone: <input type="text" id="phone"><br>
+            Gender: 
+            <input type="radio" name="gender" value="Male"> Male 
+            <input type="radio" name="gender" value="Female"> Female
+        </fieldset>
+
+        <fieldset>
+            <legend>Skills & Experience</legend>
+            Skills:<br>
+            <input type="checkbox" name="skill" value="HTML"> HTML
+            <input type="checkbox" name="skill" value="CSS"> CSS
+            <input type="checkbox" name="skill" value="JS"> JS
+            <input type="checkbox" name="skill" value="React"> React
+            <input type="checkbox" name="skill" value="Node"> Node<br><br>
+            
+            Experience Level:<br>
+            <input type="radio" name="expLevel" value="Fresher" onclick="toggleExp(true)"> Fresher
+            <input type="radio" name="expLevel" value="Experienced" onclick="toggleExp(false)"> Experienced<br>
+            
+            Experience (Years): <input type="number" id="expYears" min="0">
+        </fieldset>
+
+        <fieldset>
+            <legend>Resume Submission</legend>
+            Position Applied: 
+            <select id="position">
+                <option>Frontend Developer</option>
+                <option>Backend Developer</option>
+                <option>Fullstack Developer</option>
+            </select><br><br>
+            
+            Preferred Location: 
+            <select id="location" multiple size="3">
+                <option>New York</option>
+                <option>London</option>
+                <option>Remote</option>
+                <option>Bangalore</option>
+            </select><br><br>
+            
+            Cover Letter (min 100 words):<br>
+            <textarea id="coverLetter" rows="5" cols="50"></textarea>
+            <div id="wordCount">Words: 0</div>
+        </fieldset>
+
+        <button type="button" onclick="validateForm()">Apply Now</button>
+    </form>
+
+    <div id="overlay"></div>
+    <div id="popup">
+        <h3>Application Sent!</h3>
+        <p id="summary"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('companyLogo');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = "#0056b3";
+        ctx.fillRect(0, 0, 200, 50);
+        ctx.fillStyle = "white";
+        ctx.font = "bold 20px Arial";
+        ctx.fillText("IT COMPANY", 35, 32);
+
+        function toggleExp(isFresher) {
+            document.getElementById('expYears').disabled = isFresher;
+            if(isFresher) document.getElementById('expYears').value = "";
+        }
+
+        function validateForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const coverLetter = document.getElementById('coverLetter').value;
+            const emailRegex = /^\S+@\S+\.\S+$/;
+
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            let skillsList = document.getElementsByName('skill');
+            let skillCount = 0;
+            for (let i = 0; i < skillsList.length; i++) {
+                if (skillsList[i].checked) skillCount++;
+            }
+
+            let words = coverLetter.trim().split(/\s+/).filter(word => word.length > 0);
+            document.getElementById('wordCount').innerText = "Words: " + words.length;
+
+            if (name === "" || skillCount === 0) {
+                alert("Please fill name and select at least one skill.");
+                return;
+            }
+
+            if (words.length < 100) {
+                alert("Cover letter must be at least 100 words. Current: " + words.length);
+                return;
+            }
+
+            document.getElementById('summary').innerText = `Hello ${name}, you selected ${skillCount} skills.`;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

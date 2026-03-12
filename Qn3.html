@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h3>Student Registration</h3>
+    Roll (XX123): <input type="text" id="rl"><br>
+    Name: <input type="text"><br>
+    
+    Gender: 
+    <input type="radio" name="gen" value="M"> Male 
+    <input type="radio" name="gen" value="F"> Female 
+    <input type="radio" name="gen" value="O"> Other<br>
+
+    Department: 
+    <select id="dept">
+        <option value="CS">Computer Science</option>
+        <option value="IT">Information Technology</option>
+        <option value="ECE">Electronics</option>
+    </select><br>
+
+    Courses (Hold Ctrl to select multiple):<br>
+    <select id="sc" multiple size="5">
+        <option>JS</option>
+        <option>Python</option>
+        <option>Java</option>
+        <option>C++</option>
+        <option>PHP</option>
+    </select><br>
+
+    <input type="checkbox" id="lab"> Lab Required<br>
+    <input type="checkbox" id="hos" onclick="document.getElementById('hDiv').style.display=this.checked?'block':'none'"> Hostel Required<br>
+    
+    <div id="hDiv" style="display:none">
+        Room Preference: <input type="text">
+    </div>
+
+    Feedback (min 50 characters):<br>
+    <textarea id="fb" minlength="50" oninput="document.getElementById('cCount').innerText = this.value.length + '/50'"></textarea>
+    <span id="cCount">0/50</span><br>
+
+    <button onclick="regS()">Register</button>
+
+    <script>
+        function regS() {
+            let rl = document.getElementById('rl').value;
+            let cs = document.getElementById('sc').selectedOptions.length;
+            let fb = document.getElementById('fb').value;
+            
+            let gen = document.getElementsByName('gen');
+            let genSelected = false;
+            for(let i=0; i<gen.length; i++) {
+                if(gen[i].checked) genSelected = true;
+            }
+
+            if(!/^[A-Za-z]{2}\d{3}$/.test(rl)) {
+                alert("Invalid Roll format (Example: AB123)");
+            } else if(!genSelected) {
+                alert("Please select gender");
+            } else if(cs < 2) {
+                alert("Select at least 2 courses");
+            } else if(fb.length < 50) {
+                alert("Feedback must be at least 50 characters long");
+            } else {
+                alert("Registration Successful");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #conf { display:none; position:fixed; top:30%; left:35%; width:30%; padding:20px; background:white; border:2px solid black; z-index:999; text-align:center; }
+    </style>
+</head>
+<body id="b">
+    <form id="hForm">
+        <fieldset>
+            <legend>Personal Details</legend>
+            Full Name: <input type="text" id="fn"><br>
+            Mobile: <input type="text" id="mob"><br>
+            Gender: 
+            <input type="radio" name="g" value="M">Male
+            <input type="radio" name="g" value="F">Female
+            <input type="radio" name="g" value="O">Other
+        </fieldset>
+        <fieldset>
+            <legend>Appointment Details</legend>
+            Date: <input type="date" id="adate"><br>
+            Dept: <select id="dept"><option>Cardiology</option><option>Ortho</option><option>Neurology</option></select><br>
+            Doctors: <select id="docs" multiple size="3"><option>Dr. A</option><option>Dr. B</option><option>Dr. C</option></select><br>
+            Slot: <input type="radio" name="s" value="9">9AM <input type="radio" name="s" value="2">2PM
+        </fieldset>
+        <fieldset>
+            <legend>Symptoms</legend>
+            <textarea id="sym" placeholder="Min 30 chars"></textarea><br>
+            <input type="checkbox" id="pol"> I agree to policies
+        </fieldset>
+        <button type="button" onclick="valH()">Book Appointment</button>
+    </form>
+    <div id="conf"><h2>Appointment Confirmed!</h2><button onclick="location.reload()">Close</button></div>
+    <script>
+        function valH() {
+            let fn = document.getElementById('fn').value;
+            let mob = document.getElementById('mob').value;
+            let d = new Date(document.getElementById('adate').value);
+            let today = new Date(); today.setHours(0,0,0,0);
+            let docs = document.getElementById('docs').selectedOptions.length;
+            let sym = document.getElementById('sym').value;
+            let pol = document.getElementById('pol').checked;
+            let g = document.getElementsByName('g');
+            let gV = false;
+            for(let i=0; i<g.length; i++) { if(g[i].checked) gV = true; }
+            
+            if(fn!="" && /^\d{10}$/.test(mob) && d>=today && gV && docs>0 && sym.length>=30 && pol) {
+                document.getElementById('b').style.backgroundColor = "lightgreen";
+                document.getElementById('conf').style.display = "block";
+            } else { alert("Please check all fields and requirements."); }
+        }
+    </script>
+</body>
+</html>

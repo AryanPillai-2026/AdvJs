@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h3>Restaurant Order</h3>
+    Name: <input type="text"><br>
+    Address: <textarea></textarea><br>
+    Phone: <input type="text" id="ph"><br>
+    Meal: <input type="radio" name="mt">Veg <input type="radio" name="mt">Non-Veg <input type="radio" name="mt">Vegan<br>
+    Items:<br>
+    <input type="checkbox" name="f" value="500"> Pizza ($500)<br>
+    <input type="checkbox" name="f" value="200"> Burger ($200)<br>
+    <input type="checkbox" name="f" value="300"> Pasta ($300)<br>
+    <input type="checkbox" name="f" value="150"> Salad ($150)<br>
+    Qty: <select id="q">
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+        <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+    </select><br>
+    Slot: <select id="sl" size="3"><option>Morning</option><option>Afternoon</option><option>Evening</option></select><br>
+    Payment Method: 
+    <input type="radio" name="pay" value="Cash"> Cash 
+    <input type="radio" name="pay" value="Card"> Card 
+    <input type="radio" name="pay" value="UPI"> UPI<br>
+    <canvas id="rc" width="200" height="60" style="border:1px solid"></canvas><br>
+    <button onclick="calcF()">Calculate & Order</button>
+    <div id="tot" style="font-weight:bold; margin-top:10px;"></div>
+    <script>
+        function calcF() {
+            let items = document.getElementsByName('f');
+            let q = parseInt(document.getElementById('q').value);
+            let sum = 0;
+            let prices = []; 
+            for(let i=0; i<items.length; i++) { 
+                if(items[i].checked) sum += parseInt(items[i].value); 
+            }
+            let total = sum * q;
+            document.getElementById('tot').innerHTML = "Total: $" + total + (total > 1000 ? " (Discount Applied!)" : "");
+            let ctx = document.getElementById('rc').getContext('2d');
+            ctx.clearRect(0,0,200,60);
+            ctx.strokeRect(5,5,190,50);
+            ctx.fillText("RECEIPT TOTAL: $" + total, 40, 35);
+        }
+    </script>
+</body>
+</html>
